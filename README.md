@@ -1,5 +1,3 @@
-# -Rice-Classification-using-ANN
-Rice Classification using Artificial Neural Network (ANN)
 <div align="center">
 
 # 🌾 Rice Classification using ANN
