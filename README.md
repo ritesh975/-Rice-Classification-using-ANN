@@ -9,9 +9,9 @@
 **Artificial Neural Network • TensorFlow/Keras • Streamlit • Python**
 
 <p>
-  <a href="YOUR_STREAMLIT_DEPLOYMENT_LINK">🚀 Live Demo</a>
+  <a href="[YOUR_STREAMLIT_DEPLOYMENT_LINK](https://ritesh-rice-classification.streamlit.app/)">🚀 Live Demo</a>
   &nbsp;•&nbsp;
-  <a href="YOUR_GITHUB_REPOSITORY_LINK">💻 GitHub Repository</a>
+  <a href="[YOUR_GITHUB_REPOSITORY_LIN](https://github.com/ritesh975/-Rice-Classification-using-ANN)K">💻 GitHub Repository</a>
 </p>
 
 </div>
@@ -290,8 +290,8 @@ This project is ready for deployment using **Streamlit Community Cloud**.
 ### **Your Name**
 
 **MCA Student | Data Analytics & Deep Learning Enthusiast**
-
-- 💻 GitHub: `YOUR_GITHUB_PROFILE_LINK`
+- Demo: 'https://ritesh-rice-classification.streamlit.app/'
+- 💻 GitHub: `[YOUR_GITHUB_PROFILE_LINK](https://github.com/ritesh975/-Rice-Classification-using-ANN)`
 - 🔗 LinkedIn: `YOUR_LINKEDIN_LINK`
 
 ---
