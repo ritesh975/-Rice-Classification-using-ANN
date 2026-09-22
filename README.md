@@ -9,7 +9,7 @@
 **Artificial Neural Network • TensorFlow/Keras • Streamlit • Python**
 
 <p>
-  <a href="[YOUR_STREAMLIT_DEPLOYMENT_LINK](https://ritesh-rice-classification.streamlit.app/)">🚀 Live Demo</a>
+  <a href="https://ritesh-rice-classification.streamlit.app">🚀 Live Demo</a>
   &nbsp;•&nbsp;
   <a href="[YOUR_GITHUB_REPOSITORY_LIN](https://github.com/ritesh975/-Rice-Classification-using-ANN)K">💻 GitHub Repository</a>
 </p>
