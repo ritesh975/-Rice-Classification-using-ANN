@@ -1,243 +1,423 @@
 import streamlit as st
 import numpy as np
 import joblib
-
+from pathlib import Path
 from tensorflow.keras.models import load_model
 
-# --------------------------------------------------
-# Page Configuration
-# --------------------------------------------------
+
+# =========================================================
+# PAGE CONFIGURATION
+# =========================================================
 
 st.set_page_config(
-    page_title="Rice Classification",
+    page_title="Rice Classification ANN",
     page_icon="🌾",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 
-# --------------------------------------------------
-# Load Model and Scaler
-# --------------------------------------------------
+# =========================================================
+# CUSTOM CSS
+# =========================================================
+
+st.markdown("""
+<style>
+
+.main {
+    background: linear-gradient(135deg, #f5fff5, #ffffff);
+}
+
+.title {
+    text-align: center;
+    font-size: 48px;
+    font-weight: 800;
+    color: #1b5e20;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.card {
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0px 8px 30px rgba(0,0,0,0.10);
+    margin-bottom: 20px;
+}
+
+.result-card {
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #e8f5e9, #ffffff);
+    box-shadow: 0px 8px 30px rgba(0,0,0,0.12);
+}
+
+.stButton > button {
+    width: 100%;
+    border-radius: 12px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.feature-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2e7d32;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# =========================================================
+# PROJECT FILE PATHS
+# =========================================================
+
+BASE_DIR = Path(__file__).resolve().parent
+
+MODEL_PATH = BASE_DIR / "rice_ann_model.keras"
+SCALER_PATH = BASE_DIR / "scaler.pkl"
+
+
+# =========================================================
+# LOAD MODEL AND SCALER
+# =========================================================
 
 @st.cache_resource
 def load_resources():
 
-    model = load_model("rice_ann_model.keras")
-    scaler = joblib.load("scaler.pkl")
+    # Load ANN model
+    model = load_model(
+        MODEL_PATH,
+        compile=False
+    )
+
+    # Load scaler
+    scaler = joblib.load(SCALER_PATH)
 
     return model, scaler
 
 
-model, scaler = load_resources()
+# =========================================================
+# LOAD RESOURCES SAFELY
+# =========================================================
+
+try:
+
+    model, scaler = load_resources()
+
+except Exception as e:
+
+    st.error("❌ Model loading failed.")
+
+    st.code(str(e))
+
+    st.info(
+        "Please make sure that rice_ann_model.keras and scaler.pkl "
+        "are present in the same folder as app.py."
+    )
+
+    st.stop()
 
 
-# --------------------------------------------------
-# Header
-# --------------------------------------------------
+# =========================================================
+# HEADER
+# =========================================================
 
-st.title("🌾 Rice Classification using ANN")
-
-st.write(
-    "Enter the rice grain characteristics below "
-    "to predict the rice class."
+st.markdown(
+    '<div class="title">🌾 Rice Classification using ANN</div>',
+    unsafe_allow_html=True
 )
 
-st.divider()
+st.markdown(
+    '<div class="subtitle">'
+    'Artificial Neural Network based Rice Grain Classification System'
+    '</div>',
+    unsafe_allow_html=True
+)
 
 
-# --------------------------------------------------
-# Input Section
-# --------------------------------------------------
+# =========================================================
+# SIDEBAR
+# =========================================================
 
-st.subheader("📊 Enter Rice Features")
+with st.sidebar:
 
+    st.header("🌾 Rice ANN")
+
+    st.write(
+        """
+        This application uses an Artificial Neural Network
+        to classify rice grains based on their physical
+        characteristics.
+        """
+    )
+
+    st.divider()
+
+    st.markdown("### 🤖 Model")
+
+    st.write("Artificial Neural Network")
+
+    st.markdown("### 📊 Features")
+
+    st.write("10 input features")
+
+    st.markdown("### ⚙️ Preprocessing")
+
+    st.write("Standard Scaler")
+
+    st.divider()
+
+    st.caption("Rice Classification ANN Project")
+
+
+# =========================================================
+# INPUT SECTION
+# =========================================================
+
+st.markdown(
+    '<div class="card">',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    '<div class="feature-title">📊 Enter Rice Grain Features</div>',
+    unsafe_allow_html=True
+)
+
+st.write("Enter the physical characteristics of the rice grain.")
 
 col1, col2 = st.columns(2)
 
 
+# =========================================================
+# FEATURE INPUTS
+# =========================================================
+
 with col1:
 
-    Area = st.number_input(
+    area = st.number_input(
         "Area",
         min_value=0.0,
-        value=3000.0
+        value=5000.0,
+        step=10.0
     )
 
-    MajorAxisLength = st.number_input(
+    major_axis_length = st.number_input(
         "Major Axis Length",
         min_value=0.0,
-        value=75.0
+        value=100.0,
+        step=1.0
     )
 
-    MinorAxisLength = st.number_input(
+    minor_axis_length = st.number_input(
         "Minor Axis Length",
         min_value=0.0,
-        value=50.0
+        value=70.0,
+        step=1.0
     )
 
-    Eccentricity = st.number_input(
+    eccentricity = st.number_input(
         "Eccentricity",
         min_value=0.0,
         max_value=1.0,
-        value=0.75
+        value=0.75,
+        step=0.01
     )
 
-    ConvexArea = st.number_input(
+    convex_area = st.number_input(
         "Convex Area",
         min_value=0.0,
-        value=3100.0
+        value=5100.0,
+        step=10.0
     )
 
 
 with col2:
 
-    EquivDiameter = st.number_input(
+    equiv_diameter = st.number_input(
         "Equivalent Diameter",
         min_value=0.0,
-        value=60.0
+        value=80.0,
+        step=1.0
     )
 
-    Extent = st.number_input(
+    extent = st.number_input(
         "Extent",
         min_value=0.0,
         max_value=1.0,
-        value=0.75
+        value=0.75,
+        step=0.01
     )
 
-    Perimeter = st.number_input(
+    perimeter = st.number_input(
         "Perimeter",
         min_value=0.0,
-        value=220.0
+        value=300.0,
+        step=1.0
     )
 
-    Roundness = st.number_input(
+    roundness = st.number_input(
         "Roundness",
         min_value=0.0,
         max_value=1.0,
-        value=0.80
+        value=0.75,
+        step=0.01
     )
 
-    AspectRation = st.number_input(
+    aspect_ratio = st.number_input(
         "Aspect Ratio",
         min_value=0.0,
-        value=1.5
+        value=1.5,
+        step=0.01
     )
 
 
-st.divider()
+st.markdown("</div>", unsafe_allow_html=True)
 
 
-# --------------------------------------------------
-# Prediction Button
-# --------------------------------------------------
+# =========================================================
+# PREDICTION BUTTON
+# =========================================================
 
-if st.button(
-    "🔍 Predict Rice Class",
+st.markdown("### 🔮 Classification")
+
+predict_button = st.button(
+    "🚀 Predict Rice Class",
     use_container_width=True
-):
-
-    # Create input array
-    input_data = np.array([[
-        Area,
-        MajorAxisLength,
-        MinorAxisLength,
-        Eccentricity,
-        ConvexArea,
-        EquivDiameter,
-        Extent,
-        Perimeter,
-        Roundness,
-        AspectRation
-    ]])
-
-    # Scale input
-    input_scaled = scaler.transform(input_data)
-
-    # Prediction probability
-    prediction_probability = model.predict(
-        input_scaled,
-        verbose=0
-    )[0][0]
-
-    # Binary classification
-    if prediction_probability >= 0.5:
-
-        prediction = 1
-        class_name = "Class 1"
-
-    else:
-
-        prediction = 0
-        class_name = "Class 0"
-
-
-    # --------------------------------------------------
-    # Result
-    # --------------------------------------------------
-
-    st.subheader("🎯 Prediction Result")
-
-    if prediction == 1:
-
-        st.success(
-            f"Predicted Rice Class: {class_name}"
-        )
-
-    else:
-
-        st.info(
-            f"Predicted Rice Class: {class_name}"
-        )
-
-
-    # Probability
-
-    st.write(
-        f"Prediction Probability: "
-        f"**{prediction_probability:.2%}**"
-    )
-
-
-    # Progress bar
-
-    st.progress(
-        float(prediction_probability)
-    )
-
-
-    # --------------------------------------------------
-    # Input Summary
-    # --------------------------------------------------
-
-    st.subheader("📋 Input Features")
-
-    input_display = {
-
-        "Area": Area,
-        "Major Axis Length": MajorAxisLength,
-        "Minor Axis Length": MinorAxisLength,
-        "Eccentricity": Eccentricity,
-        "Convex Area": ConvexArea,
-        "Equivalent Diameter": EquivDiameter,
-        "Extent": Extent,
-        "Perimeter": Perimeter,
-        "Roundness": Roundness,
-        "Aspect Ratio": AspectRation
-
-    }
-
-    st.dataframe(
-        input_display,
-        use_container_width=True
-    )
-
-
-# --------------------------------------------------
-# Footer
-# --------------------------------------------------
-
-st.divider()
-
-st.caption(
-    "Rice Classification | Deep Learning ANN | Streamlit"
 )
+
+
+# =========================================================
+# PREDICTION
+# =========================================================
+
+if predict_button:
+
+    try:
+
+        # -------------------------------------------------
+        # Input feature order MUST match training order
+        # -------------------------------------------------
+
+        input_data = np.array([[
+            area,
+            major_axis_length,
+            minor_axis_length,
+            eccentricity,
+            convex_area,
+            equiv_diameter,
+            extent,
+            perimeter,
+            roundness,
+            aspect_ratio
+        ]])
+
+        # -------------------------------------------------
+        # Scale input
+        # -------------------------------------------------
+
+        scaled_data = scaler.transform(input_data)
+
+        # -------------------------------------------------
+        # ANN Prediction
+        # -------------------------------------------------
+
+        prediction = model.predict(
+            scaled_data,
+            verbose=0
+        )
+
+        probability = float(prediction[0][0])
+
+        # -------------------------------------------------
+        # Binary Classification
+        # -------------------------------------------------
+
+        if probability >= 0.5:
+
+            predicted_class = 1
+            confidence = probability * 100
+
+        else:
+
+            predicted_class = 0
+            confidence = (1 - probability) * 100
+
+
+        # =================================================
+        # RESULT
+        # =================================================
+
+        st.markdown("---")
+
+        st.markdown(
+            '<div class="result-card">',
+            unsafe_allow_html=True
+        )
+
+        st.markdown("## 🌾 Prediction Result")
+
+        if predicted_class == 1:
+
+            st.success(
+                "### Predicted Class: 1"
+            )
+
+        else:
+
+            st.info(
+                "### Predicted Class: 0"
+            )
+
+        st.metric(
+            "Prediction Confidence",
+            f"{confidence:.2f}%"
+        )
+
+        st.progress(
+            min(max(confidence / 100, 0.0), 1.0)
+        )
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+
+        # =================================================
+        # INPUT SUMMARY
+        # =================================================
+
+        st.markdown("### 📋 Input Summary")
+
+        summary_col1, summary_col2 = st.columns(2)
+
+        with summary_col1:
+
+            st.write(f"**Area:** {area}")
+            st.write(f"**Major Axis Length:** {major_axis_length}")
+            st.write(f"**Minor Axis Length:** {minor_axis_length}")
+            st.write(f"**Eccentricity:** {eccentricity}")
+            st.write(f"**Convex Area:** {convex_area}")
+
+        with summary_col2:
+
+            st.write(f"**Equivalent Diameter:** {equiv_diameter}")
+            st.write(f"**Extent:** {extent}")
+            st.write(f"**Perimeter:** {perimeter}")
+            st.write(f"**Roundness:** {roundness}")
+            st.write(f"**Aspect Ratio:** {aspect_ratio}")
+
+
+    except Exception as e:
+
+        st.error("❌ Prediction failed.")
+
+        st.code(str(e))
