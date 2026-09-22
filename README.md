@@ -11,7 +11,7 @@
 <p>
   <a href="https://ritesh-rice-classification.streamlit.app">🚀 Live Demo</a>
   &nbsp;•&nbsp;
-  <a href="[YOUR_GITHUB_REPOSITORY_LIN](https://github.com/ritesh975/-Rice-Classification-using-ANN)K">💻 GitHub Repository</a>
+  <a href="https://github.com/ritesh975/-Rice-Classification-using-ANN">💻 GitHub Repository</a>
 </p>
 
 </div>
@@ -291,7 +291,7 @@ This project is ready for deployment using **Streamlit Community Cloud**.
 
 **MCA Student | Data Analytics & Deep Learning Enthusiast**
 - Demo: 'https://ritesh-rice-classification.streamlit.app/'
-- 💻 GitHub: `[YOUR_GITHUB_PROFILE_LINK](https://github.com/ritesh975/-Rice-Classification-using-ANN)`
+- 💻 GitHub: `https://github.com/ritesh975/-Rice-Classification-using-ANN`
 - 🔗 LinkedIn: `YOUR_LINKEDIN_LINK`
 
 ---
